@@ -1,0 +1,10 @@
+# Firmware
+iwlwifi-mvm-firmware
+alsa-sof-firmware
+# Drivers de Userspace
+mesa-dri-drivers
+mesa-vulkan-drivers
+mesa-libGL
+vulkan-tools
+# Módulos de kernel extra
+kernel-modules-extra

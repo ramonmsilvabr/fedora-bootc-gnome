@@ -1,0 +1,26 @@
+# Essencial para hardware
+@multimedia
+@networkmanager-submodules
+btrfs-assistant
+tuned
+tuned-ppd
+usbutils
+sysfsutils
+cups
+gutenprint
+hplip
+dracut-config-generic
+ffmpeg-free
+# Containerização
+distrobox
+podman-compose
+# Apps
+xdg-utils
+langpacks-fonts-pt
+langpacks-pt_BR
+fpaste
+auditctl
+# Utilitários de comandos
+git
+tree
+rclone
