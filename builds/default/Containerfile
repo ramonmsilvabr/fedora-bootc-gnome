@@ -11,7 +11,10 @@ RUN dnf upgrade -y --refresh && \
     mv -v ./99-ntsync.conf /usr/lib/modules-load.d/99-ntsync.conf
 # Ambiente gráfico
 RUN dnf install -y gnome-shell --setopt=install_weak_deps=False && \
-    grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y
+    grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y && \
+    dnf remove -y gnome-software-rpm-ostree && \
+    curl -LO https://github.com/ramonmsilvabr/gnome-software-plugin-bootc/releases/download/0.1.2/gnome-software-bootc-0.1-2.fc44.x86_64.rpm && \
+    dnf install -y ./gnome-software-bootc-0.1-2.fc44.x86_64.rpm  
 # Pacotes de núcleo
 RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y && \
     mkdir -p /etc/plymouth && \
