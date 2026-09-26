@@ -3,12 +3,13 @@ FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} as final
 # Cópia da lista de pacotes e de configurações e atribui diretório de trabalho
 RUN mkdir /tmp/workdir
 WORKDIR /tmp/workdir
-COPY /packages/* /configs/* /scripts/* ./
+COPY /packages/* /configs/* /scripts/* ./* ./
 # Módulos, firmware, argumentos de boot e zram
 RUN dnf upgrade -y --refresh && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y && \
     mv -v ./1-boot-args.toml /usr/lib/bootc/kargs.d/1-boot-args.toml && \
-    mv -v ./99-ntsync.conf /usr/lib/modules-load.d/99-ntsync.conf
+    mv -v ./99-ntsync.conf /usr/lib/modules-load.d/99-ntsync.conf && \
+    mv -v ./zram-generator.conf /etc/systemd/
 # Ambiente gráfico
 RUN dnf install -y gnome-shell --setopt=install_weak_deps=False && \
     grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y && \
