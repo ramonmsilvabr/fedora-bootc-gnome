@@ -23,3 +23,5 @@ gnome-disk-utility
 gnome-initial-setup
 libcanberra
 gnome-software
+ibus-typing-booster
+ibus-gtk4
