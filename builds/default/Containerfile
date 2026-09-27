@@ -13,8 +13,8 @@ RUN dnf upgrade -y --refresh && \
 # Ambiente gráfico
 RUN dnf install -y gnome-shell --setopt=install_weak_deps=False && \
     grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
-    curl -LO https://github.com/ramonmsilvabr/gnome-software-plugin-bootc/releases/download/0.1.3/gnome-software-bootc-0.1.3-1.fc44.x86_64.rpm && \
-    dnf install -y ./gnome-software-bootc-0.1.3-1.fc44.x86_64.rpm  
+    BOOTC_PLUGIN=$(curl -s https://api.github.com/repos/ramonmsilvabr/gnome-software-plugin-bootc/releases/latest | grep "browser_download_url.*\.rpm" | cut -d '"' -f 4 | head -n 1) && \
+    dnf5 install -y "$BOOTC_PLUGIN"
 # Pacotes de núcleo
 RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /etc/plymouth && \
