@@ -12,6 +12,7 @@ nautilus
 ptyxis
 gnome-backgrounds
 google-noto-color-emoji-fonts
+google-noto-emoji-fonts
 papers-thumbnailer
 gst-thumbnailers
 gnome-epub-thumbnailer
@@ -21,8 +22,12 @@ bash-color-prompt
 gnome-tour
 gnome-disk-utility
 gnome-initial-setup
+gnome-software-fedora-langpacks
 libcanberra
 gnome-software
 ibus-typing-booster
 ibus-gtk4
+ibus-setup
 adw-gtk3-theme
+gvfs-fuse
+mailcap

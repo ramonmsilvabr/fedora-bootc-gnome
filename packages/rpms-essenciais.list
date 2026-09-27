@@ -11,6 +11,8 @@ gutenprint
 hplip
 dracut-config-generic
 ffmpeg-free
+intel-mediasdk
+intel-vpl-gpu-rt
 # Containerização
 distrobox
 podman-compose
