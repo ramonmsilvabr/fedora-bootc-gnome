@@ -14,7 +14,9 @@ RUN dnf upgrade -y --refresh && \
 RUN dnf install -y gnome-shell --setopt=install_weak_deps=False && \
     grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     BOOTC_PLUGIN=$(curl -s https://api.github.com/repos/ramonmsilvabr/gnome-software-plugin-bootc/releases/latest | grep "browser_download_url.*\.rpm" | cut -d '"' -f 4 | head -n 1) && \
-    dnf5 install -y "$BOOTC_PLUGIN"
+    dnf5 install -y "$BOOTC_PLUGIN" && \
+    rm -f /usr/lib64/gnome-software/plugins-*/libgs_plugin_dnf5.so \
+          /usr/lib64/gnome-software/plugins-*/libgs_plugin_packagekit.so
 # Pacotes de núcleo
 RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /etc/plymouth && \
