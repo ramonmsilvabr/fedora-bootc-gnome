@@ -1,16 +1,21 @@
 # Essencial para hardware
 @multimedia
+ffmpeg-free
 @networkmanager-submodules
+nss-mdns
 btrfs-assistant
+btrfsmaintenance
+snapper
 tuned
 tuned-ppd
+audit
+kernel-tools
 usbutils
 sysfsutils
 cups
 gutenprint
 hplip
 dracut-config-generic
-ffmpeg-free
 intel-mediasdk
 intel-vpl-gpu-rt
 # Containerização
@@ -20,10 +25,16 @@ podman-compose
 xdg-utils
 langpacks-fonts-pt
 langpacks-pt_BR
-fpaste
+hunspell-pt-BR
+hyphen-pt-BR
+glibc-langpack-pt
+open-sans-fonts
 auditctl
+liberation-mono-fonts
 # Utilitários de comandos
 git
 tree
 rclone
 fastfetch
+fpaste
+avahi-tools
