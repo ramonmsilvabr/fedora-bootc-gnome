@@ -5,6 +5,3 @@ alsa-sof-firmware
 mesa-dri-drivers
 mesa-vulkan-drivers
 mesa-libGL
-vulkan-tools
-# Módulos de kernel extra
-kernel-modules-extra
