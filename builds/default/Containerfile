@@ -6,7 +6,7 @@ WORKDIR /tmp/workdir
 COPY /packages/* /configs/* /scripts/* ./* ./
 # Módulos, firmware, argumentos de boot e zram
 RUN dnf upgrade -y --refresh && \
-    grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False&& \
+    grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mv -v ./1-boot-args.toml /usr/lib/bootc/kargs.d/1-boot-args.toml && \
     mv -v ./99-ntsync.conf /usr/lib/modules-load.d/99-ntsync.conf && \
     mv -v ./zram-generator.conf /etc/systemd/
