@@ -18,6 +18,7 @@ hplip
 dracut-config-generic
 intel-mediasdk
 intel-vpl-gpu-rt
+ntsync-autoload
 # Containerização
 distrobox
 podman-compose
