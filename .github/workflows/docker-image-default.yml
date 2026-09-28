@@ -2,7 +2,7 @@ name: default build
 
 on:
   schedule:
-    - cron: '00 10 * * *' 
+    - cron: '45 8 * * *' 
   workflow_dispatch:
     inputs:
       fedora_version:
