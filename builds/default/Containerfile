@@ -3,7 +3,7 @@ FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} as final
 # Cópia da lista de pacotes e de configurações e atribui diretório de trabalho
 RUN mkdir /tmp/workdir
 WORKDIR /tmp/workdir
-COPY /packages/* /configs/* /scripts/* ./* ./
+COPY /packages/* /configs/* /scripts/* ./
 # Módulos, firmware, argumentos de boot e zram
 RUN dnf upgrade -y --refresh && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
