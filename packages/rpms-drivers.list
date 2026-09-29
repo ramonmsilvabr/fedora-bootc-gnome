@@ -5,6 +5,8 @@ alsa-sof-firmware
 mesa-dri-drivers
 mesa-vulkan-drivers
 mesa-libGL
+pipewire-plugin-libcamera
+pipewire-jack-audio-connection-kit
 # Multimídia e Codecs
 @multimedia
 ffmpeg-free
@@ -13,6 +15,7 @@ intel-vpl-gpu-rt
 # Rede
 @networkmanager-submodules
 nss-mdns
+firewalld
 # Sistemas de arquivos
 btrfs-assistant
 btrfsmaintenance
@@ -29,5 +32,9 @@ sysfsutils
 cups
 gutenprint
 hplip
+cups-browsed
+cups-filters-driverless
 # Módulos
 ntsync-autoload
+# Compartilhamentos
+samba-client

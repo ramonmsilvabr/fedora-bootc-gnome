@@ -19,6 +19,8 @@ ibus-gtk4
 ibus-setup
 adw-gtk3-theme
 gvfs-fuse
+gvfs-smb
+gvfs-mtp
 mailcap
 sushi
 wl-clipboard
