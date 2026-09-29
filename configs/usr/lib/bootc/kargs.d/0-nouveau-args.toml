@@ -1,4 +1,4 @@
 kargs = [
-    "nouveau.runpm=0",
-    "nouveau.atomic=1"
+    "nouveau.atomic=1",
+    "nouveau.runpm=0"
 ]
