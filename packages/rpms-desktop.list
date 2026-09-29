@@ -18,6 +18,7 @@ ibus-typing-booster
 ibus-gtk4
 ibus-setup
 adw-gtk3-theme
+libcanberra-gtk3
 gvfs-fuse
 gvfs-smb
 gvfs-mtp
