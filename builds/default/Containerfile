@@ -7,6 +7,7 @@ COPY /packages/* /configs/* /scripts/* ./
 # Módulos, firmware, drivers de Userspace, ,módulos e zram
 RUN dnf upgrade -y --refresh && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    mv -v ./0-nouveau-args.toml /usr/lib/bootc/kargs.d/0-nouveau-args.toml && \
     mv -v ./zram-generator.conf /etc/systemd/
 # Ambiente gráfico - gnome-shell e mutter
 RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
