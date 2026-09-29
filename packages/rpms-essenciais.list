@@ -1,28 +1,7 @@
-# Essencial para hardware
-@multimedia
-ffmpeg-free
-@networkmanager-submodules
-nss-mdns
-btrfs-assistant
-btrfsmaintenance
-snapper
-tuned
-tuned-ppd
-audit
-kernel-tools
-usbutils
-sysfsutils
-cups
-gutenprint
-hplip
-dracut-config-generic
-intel-mediasdk
-intel-vpl-gpu-rt
-ntsync-autoload
 # Containerização
 distrobox
 podman-compose
-# Apps
+# Apps, Fontes e Idiomas
 xdg-utils
 langpacks-fonts-pt
 langpacks-pt_BR
@@ -32,6 +11,17 @@ glibc-langpack-pt
 open-sans-fonts
 auditctl
 liberation-mono-fonts
+google-noto-color-emoji-fonts
+google-noto-emoji-fonts
+# Plymouth - Tela de boot
+plymouth
+plymouth-core-libs
+plymouth-graphics-libs
+plymouth-plugin-label
+plymouth-plugin-two-step
+plymouth-scripts
+plymouth-system-theme
+plymouth-theme-spinner
 # Utilitários de comandos
 git
 tree
@@ -39,3 +29,4 @@ rclone
 fastfetch
 fpaste
 avahi-tools
+bash-color-prompt

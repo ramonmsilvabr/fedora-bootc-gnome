@@ -5,3 +5,29 @@ alsa-sof-firmware
 mesa-dri-drivers
 mesa-vulkan-drivers
 mesa-libGL
+# Multimídia e Codecs
+@multimedia
+ffmpeg-free
+intel-mediasdk
+intel-vpl-gpu-rt
+# Rede
+@networkmanager-submodules
+nss-mdns
+# Sistemas de arquivos
+btrfs-assistant
+btrfsmaintenance
+snapper
+# Performance
+tuned
+tuned-ppd
+# Ferramentas de kernel
+audit
+kernel-tools
+usbutils
+sysfsutils
+# Impressoras
+cups
+gutenprint
+hplip
+# Módulos
+ntsync-autoload

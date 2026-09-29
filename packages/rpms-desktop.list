@@ -1,24 +1,14 @@
-# Tela de boot bonita
-plymouth
-plymouth-core-libs
-plymouth-graphics-libs
-plymouth-plugin-label
-plymouth-plugin-two-step
-plymouth-scripts
-plymouth-system-theme
-plymouth-theme-spinner
+# Ambiente Desktop
+gnome-shell
 # Utilitários padrão do GNOME
 nautilus
 ptyxis
 gnome-backgrounds
-google-noto-color-emoji-fonts
-google-noto-emoji-fonts
 papers-thumbnailer
 gst-thumbnailers
 gnome-epub-thumbnailer
 glycin-thumbnailer
 ffmpegthumbnailer
-bash-color-prompt
 gnome-tour
 gnome-disk-utility
 gnome-initial-setup
