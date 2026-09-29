@@ -12,6 +12,7 @@ pipewire-jack-audio-connection-kit
 ffmpeg-free
 intel-mediasdk
 intel-vpl-gpu-rt
+libcanberra-gtk3
 # Rede
 @networkmanager-submodules
 nss-mdns
