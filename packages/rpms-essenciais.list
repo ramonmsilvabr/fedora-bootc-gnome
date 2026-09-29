@@ -13,6 +13,8 @@ auditctl
 liberation-mono-fonts
 google-noto-color-emoji-fonts
 google-noto-emoji-fonts
+# Compartilhamentos
+samba-client
 # Plymouth - Tela de boot
 plymouth
 plymouth-core-libs
