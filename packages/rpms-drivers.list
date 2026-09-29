@@ -36,5 +36,6 @@ cups-browsed
 cups-filters-driverless
 # Módulos
 ntsync-autoload
+kernel-modules-extra
 # Compartilhamentos
 samba-client
