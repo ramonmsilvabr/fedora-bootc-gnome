@@ -2,7 +2,8 @@ name: default build
 
 on:
   schedule:
-    - cron: '45 8 * * *' 
+    - cron: '0 12 * * 1'
+      timezone: 'America/Sao_Paulo'
   workflow_dispatch:
     inputs:
       fedora_version:
