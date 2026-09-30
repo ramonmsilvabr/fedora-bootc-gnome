@@ -35,6 +35,7 @@ gutenprint
 hplip
 cups-browsed
 cups-filters-driverless
+foo2zjs
 # Módulos
 ntsync-autoload
 kernel-modules-extra
