@@ -15,6 +15,7 @@ google-noto-color-emoji-fonts
 google-noto-emoji-fonts
 # Compartilhamentos
 samba-client
+samba-winbind-clients
 # Plymouth - Tela de boot
 plymouth
 plymouth-core-libs
