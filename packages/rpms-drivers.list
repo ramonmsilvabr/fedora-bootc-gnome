@@ -36,6 +36,7 @@ hplip
 cups-browsed
 cups-filters-driverless
 foo2zjs
+splix
 # Módulos
 ntsync-autoload
 kernel-modules-extra
