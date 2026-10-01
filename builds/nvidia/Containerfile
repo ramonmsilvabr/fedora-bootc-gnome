@@ -23,7 +23,6 @@ RUN dnf upgrade -y --refresh && \
     dnf install -y 'dnf5-command(config-manager)' && \
     dnf config-manager setopt rpmfusion-nonfree-nvidia-driver.enabled=1 && \
     dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
-    sed -i 's|^sslcacert=.*|sslcacert=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem|' /etc/yum.repos.d/nvidia-container-toolkit.repo && \
     mv -v ./0-nvidia-args.toml /usr/lib/bootc/kargs.d/0-nvidia-args.toml && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     grep -v '^#' ./rpms-nvidia-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
