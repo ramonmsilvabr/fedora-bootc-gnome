@@ -10,7 +10,6 @@ dnf config-manager setopt rpmfusion-nonfree-nvidia-driver.enabled=1 && \
 dnf install -y akmod-nvidia && \
 akmods --kernels "$KERNEL_VERSION" --force
 
-ARG SECUREBOOT_IGNORE=false
 # Imagem principal
 FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} AS final
 # Cópia da lista de pacotes e de configurações e atribui diretório de trabalho
@@ -28,9 +27,9 @@ RUN dnf upgrade -y --refresh && \
     dnf config-manager setopt rpmfusion-nonfree-nvidia-driver.enabled=1 && \
     dnf install -y ./kmod-nvidia*.rpm xorg-x11-drv-nvidia-cuda --setopt=install_weak_deps=False && \
     mv -v ./zram-generator.conf /etc/systemd
+ARG SECUREBOOT=true
 RUN --mount=type=bind,source=.,target=/context \
-/bin/bash -c 'if [ "$SECUREBOOT_IGNORE" = "false" ]; then \
-        set -e; \
+/bin/bash -c 'if [ "$SECUREBOOT" = true ]; then \
         mkdir -p ./.actions; \
         cp -r /context/.actions/* ./; \
         bash ./secureboot-sign-modules.sh; \
