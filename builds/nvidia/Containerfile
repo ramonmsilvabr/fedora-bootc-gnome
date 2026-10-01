@@ -23,7 +23,7 @@ RUN dnf upgrade -y --refresh && \
     dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
     mv -v ./0-nvidia-args.toml /usr/lib/bootc/kargs.d/0-nvidia-args.toml && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
-    grep -v '^#' ./rpms-nvidia-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    grep -v '^#' ./rpms-nvidia-drivers.list | tr '\n' ' ' | xargs dnf install -y --nogpgcheck --setopt=install_weak_deps=False && \
     dnf config-manager setopt rpmfusion-nonfree-nvidia-driver.enabled=1 && \
     dnf install -y ./kmod-nvidia*.rpm xorg-x11-drv-nvidia-cuda --setopt=install_weak_deps=False && \
     mv -v ./zram-generator.conf /etc/systemd
@@ -48,8 +48,6 @@ RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --s
 WORKDIR /
 RUN chmod +x /tmp/workdir/initramfs-regen.sh && \
     bash -c /tmp/workdir/initramfs-regen.sh
-
-
 # Fase de Limpeza
 RUN systemctl mask systemd-remount-fs.service && \
     rm -rvf /tmp/workdir && \
