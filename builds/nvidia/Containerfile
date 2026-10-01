@@ -1,0 +1,62 @@
+ARG FEDORA_VERSION=44
+
+# Imagem de compilação de módulos
+FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} AS builder
+RUN dnf upgrade -y 'kernel*' --refresh && \
+KERNEL_VERSION="$(rpm -q kernel-core --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')" && \
+dnf install -y 'dnf5-command(config-manager)' && \
+dnf install -y fedora-workstation-repositories && \
+dnf config-manager setopt rpmfusion-nonfree-nvidia-driver.enabled=1 && \
+dnf install -y akmod-nvidia && \
+akmods --kernels "$KERNEL_VERSION" --force
+
+ARG SECUREBOOT_IGNORE=false
+# Imagem principal
+FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} AS final
+# Cópia da lista de pacotes e de configurações e atribui diretório de trabalho
+RUN mkdir /tmp/workdir
+WORKDIR /tmp/workdir
+COPY /packages/* /configs/* /scripts/* ./
+COPY --from=builder /var/cache/akmods/nvidia/kmod-nvidia*.rpm ./
+# Módulos, firmware, drivers de Userspace, módulos e zram
+RUN dnf upgrade -y --refresh && \
+    dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
+    sed -i 's|^sslcacert=.*|sslcacert=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem|' /etc/yum.repos.d/nvidia-container-toolkit.repo && \
+    mv -v ./0-nvidia-args.toml /usr/lib/bootc/kargs.d/0-nvidia-args.toml && \
+    grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    grep -v '^#' ./rpms-nvidia-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    dnf install -y ./kmod-nvidia*.rpm xorg-x11-drv-nvidia-cuda --setopt=install_weak_deps=False && \
+    mv -v ./zram-generator.conf /etc/systemd
+RUN --mount=type=bind,source=.,target=/context \
+/bin/bash -c 'if [ "$SECUREBOOT_IGNORE" = "false" ]; then \
+        set -e; \
+        mkdir -p ./.actions; \
+        cp -r /context/.actions/* ./; \
+        bash ./secureboot-sign-modules.sh; \
+fi'
+# Ambiente gráfico - gnome-shell e mutter
+RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    BOOTC_PLUGIN=$(curl -s https://api.github.com/repos/ramonmsilvabr/gnome-software-plugin-bootc/releases/latest | grep "browser_download_url.*\.rpm" | cut -d '"' -f 4 | head -n 1) && \
+    dnf5 install -y --nogpgcheck "$BOOTC_PLUGIN" && \
+    rm -f /usr/lib64/gnome-software/plugins-*/libgs_plugin_dnf5.so \
+        /usr/lib64/gnome-software/plugins-*/libgs_plugin_packagekit.so \
+        /usr/lib64/gnome-software/plugins-*/libgs_plugin_dkms.so
+# Pacotes essenciais
+RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    mkdir -p /etc/plymouth && \
+    mv -v ./plymouthd.conf /etc/plymouth/plymouthd.conf
+WORKDIR /
+RUN chmod +x /tmp/workdir/initramfs-regen.sh && \
+    bash -c /tmp/workdir/initramfs-regen.sh
+
+
+# Fase de Limpeza
+RUN systemctl mask systemd-remount-fs.service && \
+    rm -rvf /tmp/workdir && \
+    dnf clean all && \
+    rm -rfv /var/cache/* \
+        /var/lib/* \
+        /var/log/* \
+        /var/tmp/*
+# Ajustar container 
+RUN bootc container lint

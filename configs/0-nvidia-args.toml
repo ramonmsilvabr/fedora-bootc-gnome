@@ -1,0 +1,7 @@
+kargs = [
+    "rd.driver.blacklist=nouveau,nova_core",
+    "modprobe.blacklist=nouveau,nova_core",
+    "nvidia.NVreg_EnableS0ixPowerManagement=1",
+    "nvidia.NVreg_TemporaryFilePath=/var/tmp",
+    "nvidia.NVreg_EnableResizableBar=1"
+]
