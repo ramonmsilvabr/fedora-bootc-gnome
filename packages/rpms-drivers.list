@@ -29,6 +29,9 @@ audit
 kernel-tools
 usbutils
 sysfsutils
+pciutils
+smartmontools
+lshw
 # Impressoras
 cups
 gutenprint
