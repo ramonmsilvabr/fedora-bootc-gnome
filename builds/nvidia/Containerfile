@@ -18,14 +18,16 @@ WORKDIR /tmp/workdir
 COPY /packages/* /configs/* /scripts/* ./
 COPY --from=builder /var/cache/akmods/nvidia/kmod-nvidia*.rpm ./
 # Módulos, firmware, drivers de Userspace, módulos e zram
-RUN dnf upgrade -y --refresh && \
-    dnf install -y 'dnf5-command(config-manager)' && \
+RUN dnf install -y 'dnf5-command(config-manager)' && \
     dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
-    mv -v ./0-nvidia-args.toml /usr/lib/bootc/kargs.d/0-nvidia-args.toml && \
-    grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
-    grep -v '^#' ./rpms-nvidia-drivers.list | tr '\n' ' ' | xargs dnf install -y --nogpgcheck --setopt=install_weak_deps=False && \
+    dnf install -y fedora-workstation-repositories && \
     dnf config-manager setopt rpmfusion-nonfree-nvidia-driver.enabled=1 && \
-    dnf install -y ./kmod-nvidia*.rpm xorg-x11-drv-nvidia-cuda --setopt=install_weak_deps=False && \
+    dnf upgrade -y --refresh && \  
+    grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    grep -v '^#' ./rpms-nvidia-containers.list | tr '\n' ' ' | xargs dnf install -y --nogpgcheck --setopt=install_weak_deps=False && \
+    dnf install -y ./kmod-nvidia*.rpm \
+        xorg-x11-drv-nvidia-cuda libva-nvidia-driver --setopt=install_weak_deps=False && \
+    mv -v ./0-nvidia-args.toml /usr/lib/bootc/kargs.d/0-nvidia-args.toml && \
     mv -v ./zram-generator.conf /etc/systemd
 ARG SECUREBOOT=true
 RUN --mount=type=bind,source=.,target=/context \
