@@ -1,0 +1,5 @@
+# NVIDIA libraries
+nvidia-container-toolkit
+nvidia-container-toolkit-base
+libnvidia-container-tools
+libnvidia-container1
