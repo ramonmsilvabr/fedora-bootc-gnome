@@ -9,7 +9,8 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
     dnf upgrade -y --refresh && \
     mv -v ./0-nouveau-args.toml /usr/lib/bootc/kargs.d/0-nouveau-args.toml && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
-    mv -v ./zram-generator.conf /etc/systemd/
+    mv -v ./zram-generator.conf /etc/systemd/ && \
+    mv -v ./oomd.conf /etc/systemd/
 # Ambiente gráfico - gnome-shell e mutter
 RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \

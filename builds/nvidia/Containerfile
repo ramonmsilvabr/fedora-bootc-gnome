@@ -28,7 +28,8 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
     dnf install -y ./kmod-nvidia*.rpm \
         xorg-x11-drv-nvidia-cuda libva-nvidia-driver --setopt=install_weak_deps=False && \
     mv -v ./0-nvidia-args.toml /usr/lib/bootc/kargs.d/0-nvidia-args.toml && \
-    mv -v ./zram-generator.conf /etc/systemd
+    mv -v ./zram-generator.conf /etc/systemd && \
+    mv -v ./oomd.conf /etc/systemd/
 ARG SECUREBOOT=true
 RUN --mount=type=bind,source=.,target=/context \
 /bin/bash -c 'if [ "$SECUREBOOT" = true ]; then \

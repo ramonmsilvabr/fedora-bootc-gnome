@@ -23,7 +23,6 @@ snapper
 # Performance
 tuned
 tuned-ppd
-systemd-oomd-defaults
 # Ferramentas de kernel
 audit
 kernel-tools
