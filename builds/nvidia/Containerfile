@@ -29,8 +29,8 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
         xorg-x11-drv-nvidia-cuda libva-nvidia-driver --setopt=install_weak_deps=False && \
     mv -v ./0-nvidia-args.toml /usr/lib/bootc/kargs.d/0-nvidia-args.toml && \
     mkdir -p /usr/lib/systemd/zram-generator.conf.d && \
-    mv -v ./zram-generator.conf /etc/systemd/zram-generator.conf.d/1-zram-custom.conf && \
-    mv -v ./oomd.conf /etc/systemd/oomd.conf.d/9-oomd-custom.conf
+    mv -v ./zram-generator.conf /usr/lib/systemd/zram-generator.conf.d/1-zram-custom.conf && \
+    mv -v ./oomd.conf /usr/lib/systemd/oomd.conf.d/9-oomd-custom.conf
 ARG SECUREBOOT=true
 RUN --mount=type=bind,source=.,target=/context \
 /bin/bash -c 'if [ "$SECUREBOOT" = true ]; then \
