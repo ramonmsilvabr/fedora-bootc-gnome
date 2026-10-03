@@ -27,11 +27,13 @@ systemd-oomd-defaults
 # Ferramentas de kernel
 audit
 kernel-tools
+mesa-utils
+vulkan-tools
 usbutils
 sysfsutils
 pciutils
 smartmontools
-lshw
+drm_info
 # Impressoras
 cups
 gutenprint
