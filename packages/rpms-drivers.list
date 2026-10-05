@@ -26,7 +26,6 @@ tuned-ppd
 # Ferramentas de kernel
 audit
 kernel-tools
-mesa-utils
 vulkan-tools
 usbutils
 sysfsutils
