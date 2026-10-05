@@ -9,7 +9,7 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
     dnf upgrade -y --refresh && \
     mv -v ./0-nouveau-args.toml /usr/lib/bootc/kargs.d/0-nouveau-args.toml && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
-    mkdir -p /usr/lib/systemd/zram-generator.conf.d && \
+    mkdir -p /usr/lib/systemd/zram-generator.conf.d /usr/lib/systemd/oomd.conf.d && \
     mv -v ./zram-generator.conf /usr/lib/systemd/zram-generator.conf.d/1-zram-custom.conf && \
     mv -v ./oomd.conf /usr/lib/systemd/oomd.conf.d/1-oomd-custom.conf
 # Ambiente gráfico - gnome-shell e mutter
