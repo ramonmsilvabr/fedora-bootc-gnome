@@ -30,6 +30,6 @@ RUN systemctl mask systemd-remount-fs.service && \
     rm -rfv /var/cache/* \
         /var/log/* \
         /var/tmp/* \
-        /var/lib/dnf
+        /var/lib/dnf/*
 # Ajustar container 
 RUN bootc container lint
