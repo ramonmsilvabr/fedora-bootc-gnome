@@ -28,7 +28,6 @@ RUN systemctl mask systemd-remount-fs.service && \
     rm -rvf /tmp/workdir && \
     dnf clean all && \
     rm -rfv /var/cache/* \
-        /var/lib/* \
         /var/log/* \
         /var/tmp/*
 # Ajustar container 
