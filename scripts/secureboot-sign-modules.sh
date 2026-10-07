@@ -1,32 +1,35 @@
 #!/usr/bin/bash
 
-# Pega versão do pacote de kernel do Fedora
+# Variable that holds the kernel version based in rpm format
 KERNEL_VERSION="$(rpm -q kernel-core --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-# Configurações - Altere os caminhos para onde estão seus arquivos
+# Variables that hold the directory of the MOK certificate and MOK private key
 PRIV_KEY="./MOK.priv"
 DER_CERT="./MOK.der"
 
+# Changes permissions for security context
 chmod 444 $DER_CERT
 chmod 400 $PRIV_KEY
 
+# Temporalily install kernel-devel
 dnf install -y kernel-devel 
 
-# kernel-devel provem o código fonte e o utilitário de assinatura
+# The kernel signs based in the script from kernel source
 SIGN_FILE="/usr/src/kernels/${KERNEL_VERSION}/scripts/sign-file"
 
-# Filtra a existência do utilitário de assinatura
+# If the kernel signature utility exists procced, otherwise exit
 if [ ! -f "$SIGN_FILE" ]; then
     exit 1
 fi
 
-# Diretório dos módulos de kernel
+# Directory that has the out-of-tree modules to sign
 TARGET_DIR="/usr/lib/modules/${KERNEL_VERSION}/extra/"
 
-# Checa a existência de módulos compactados no TARGET_DIR
+# This part checks all the modules present at runtime and signs them
 find "$TARGET_DIR" -type f \( -name "*.ko" -o -name "*.ko.xz" -o -name "*.ko.zst" \) | while read -r MODULE_PATH; do
     EXTENSION="${MODULE_PATH##*.}"
     RECOMPRESS=""
     CURRENT_FILE="$MODULE_PATH"
+    # This part decompress the file and marks which type has been used
     if [ "$EXTENSION" == "xz" ]; then
         xz -d "$MODULE_PATH"
         CURRENT_FILE="${MODULE_PATH%.xz}"
@@ -36,7 +39,10 @@ find "$TARGET_DIR" -type f \( -name "*.ko" -o -name "*.ko.xz" -o -name "*.ko.zst
         CURRENT_FILE="${MODULE_PATH%.zst}"
         RECOMPRESS="zstd"
     fi
+    # This is the exact sign process that uses it
     "$SIGN_FILE" sha256 "$PRIV_KEY" "$DER_CERT" "$CURRENT_FILE"
+    echo "${SIGN_FILE} has been signed for Secure Boot"
+    # Then this part recompress it based in the mark left before
     if [ "$RECOMPRESS" == "xz" ]; then
         xz -f -C crc32 "$CURRENT_FILE"
     elif [ "$RECOMPRESS" == "zstd" ]; then
@@ -44,6 +50,8 @@ find "$TARGET_DIR" -type f \( -name "*.ko" -o -name "*.ko.xz" -o -name "*.ko.zst
     fi
 done
 
+# This cleanup deletes the private key and certificate entirely after execution
 rm -rfv "$PRIV_KEY" "$DER_CERT"
 
+# This removes the temporarily installed kernel-devel package
 dnf remove -y kernel-devel 
