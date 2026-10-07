@@ -1,7 +1,7 @@
-# Containerização
+# Container tools
 distrobox
 podman-compose
-# Apps, Fontes e Idiomas
+# Apps, Fonts and Languages
 xdg-utils
 langpacks-fonts-pt
 langpacks-pt_BR
@@ -13,10 +13,10 @@ auditctl
 liberation-mono-fonts
 google-noto-color-emoji-fonts
 google-noto-emoji-fonts
-# Compartilhamentos
+# Shares
 samba-client
 samba-winbind-clients
-# Plymouth - Tela de boot
+# Boot Splash screens
 plymouth
 plymouth-core-libs
 plymouth-graphics-libs

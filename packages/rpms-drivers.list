@@ -1,29 +1,29 @@
 # Firmware
 iwlwifi-mvm-firmware
 alsa-sof-firmware
-# Drivers de Userspace
+# Userspace Graphics, Sound and Camera drivers
 mesa-dri-drivers
 mesa-vulkan-drivers
 mesa-libGL
 pipewire-plugin-libcamera
 pipewire-jack-audio-connection-kit
-# Multimídia e Codecs
+# Codecs and multimedia
 @multimedia
 ffmpeg-free
 intel-mediasdk
 intel-vpl-gpu-rt
-# Rede
+# Network
 @networkmanager-submodules
 nss-mdns
 firewalld
-# Sistemas de arquivos
+# Filesystems
 btrfs-assistant
 btrfsmaintenance
 snapper
 # Performance
 tuned
 tuned-ppd
-# Ferramentas de kernel
+# Kernel tools
 audit
 kernel-tools
 vulkan-tools
@@ -32,7 +32,7 @@ sysfsutils
 pciutils
 smartmontools
 drm_info
-# Impressoras
+# Printers
 cups
 gutenprint
 hplip
@@ -40,6 +40,6 @@ cups-browsed
 cups-filters-driverless
 foo2zjs
 splix
-# Módulos
+# Modules
 ntsync-autoload
 kernel-modules-extra

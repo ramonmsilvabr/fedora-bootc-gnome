@@ -1,6 +1,6 @@
-# Ambiente Desktop
+# Desktop Environment: GNOME Shell with Mutter
 gnome-shell
-# Utilitários padrão do GNOME
+# Default utilties for GNOME
 nautilus
 ptyxis
 gnome-backgrounds
