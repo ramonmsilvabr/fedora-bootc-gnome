@@ -78,7 +78,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.SELECTED_VERSION }}
           sudo podman rmi localhost/bootc-raw:latest
 
-      - name: Apply tags and pushs
+      - name: Apply tags and push final chunked image
         run: |
           REGISTRY_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
           PRIMARY_TAG="${{ env.SELECTED_VERSION }}"

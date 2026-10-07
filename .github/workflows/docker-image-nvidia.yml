@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       fedora_version:
-        description: 'Versão do Fedora'
+        description: 'Fedora version'
         default: '44'
         required: false
 
