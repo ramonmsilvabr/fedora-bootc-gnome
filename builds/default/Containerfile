@@ -1,10 +1,13 @@
+# Fedora version selection
 ARG FEDORA_VERSION=44
+# Pull fedora-bootc from official quay.io repo as final image
 FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} as final
-# Cópia da lista de pacotes e de configurações e atribui diretório de trabalho
+# Change working directory
 RUN mkdir /tmp/workdir
 WORKDIR /tmp/workdir
+# Copy all the scripts, configs and package lists
 COPY /packages/* /configs/* /scripts/* ./
-# Módulos, firmware, drivers de Userspace, ,módulos e zram
+# Drivers, firmware, hardware support and fine-tuned performance customs
 RUN dnf install -y 'dnf5-command(config-manager)' && \
     dnf upgrade -y --refresh && \
     mv -v ./0-nouveau-args.toml /usr/lib/bootc/kargs.d/0-nouveau-args.toml && \
@@ -12,18 +15,20 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
     mkdir -p /usr/lib/systemd/zram-generator.conf.d /usr/lib/systemd/oomd.conf.d && \
     mv -v ./zram-generator.conf /usr/lib/systemd/zram-generator.conf.d/1-zram-custom.conf && \
     mv -v ./oomd.conf /usr/lib/systemd/oomd.conf.d/1-oomd-custom.conf
-# Ambiente gráfico - gnome-shell e mutter
+# Desktop environment and related tools
 RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \
     dnf install -y --nogpgcheck gnome-software-bootc
-# Pacotes essenciais
+# Essential Packages
 RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /etc/plymouth && \
     mv -v ./plymouthd.conf /etc/plymouth/plymouthd.conf
+# Return to root
 WORKDIR /
+# This regenerates initramfs for the container
 RUN chmod +x /tmp/workdir/initramfs-regen.sh && \
     bash -c /tmp/workdir/initramfs-regen.sh
-# Fase de Limpeza
+# Cleanup time
 RUN systemctl mask systemd-remount-fs.service && \
     rm -rvf /tmp/workdir && \
     dnf clean all && \
@@ -31,5 +36,5 @@ RUN systemctl mask systemd-remount-fs.service && \
         /var/log/* \
         /var/tmp/* \
         /var/lib/dnf/*
-# Ajustar container 
+# Bootc Lint Part 
 RUN bootc container lint
