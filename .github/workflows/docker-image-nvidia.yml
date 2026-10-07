@@ -32,7 +32,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
         
-      - name: Gerar metadados do build
+      - name: Generate build metadata
         id: meta
         run: |
           VERSION=${{ env.SELECTED_VERSION }}
@@ -52,7 +52,7 @@ jobs:
           echo "date=${DATE}"     >> $GITHUB_OUTPUT
           echo "kernel_version=$KERNEL_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Pega Key do Secure Boot
+      - name: Get Secure Boot key
         env:
           PRIVATEKEY_BASE64: ${{ secrets.SECURE_BOOT_KEY }}
         run: |
@@ -64,7 +64,7 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login \
             -u "${{ github.actor }}" --password-stdin "${{ env.REGISTRY }}"
             
-      - name: Compilação da imagem inicial pura
+      - name: Build initial unchunked image
         run: |
           sudo podman build \
             --skip-unused-stages=false \
@@ -75,7 +75,7 @@ jobs:
             --build-arg FEDORA_VERSION=${{ env.SELECTED_VERSION }} \
             .
 
-      - name: Repartir via bootc-base-imagectl
+      - name: Rechunk via bootc-base-imagectl
         run: |
           sudo podman run --rm --privileged \
             -v /var/lib/containers:/var/lib/containers \
@@ -85,7 +85,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.SELECTED_VERSION }}
           sudo podman rmi localhost/bootc-raw:latest
 
-      - name: Aplicar etiquetas e Push da imagem
+      - name: Apply tags and push final chunked imagesss
         run: |
           REGISTRY_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
           PRIMARY_TAG="${{ env.SELECTED_VERSION }}"
