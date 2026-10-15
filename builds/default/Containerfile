@@ -29,6 +29,18 @@ WORKDIR /
 # This regenerates initramfs for the container
 RUN chmod +x /tmp/workdir/initramfs-regen.sh && \
     bash -c /tmp/workdir/initramfs-regen.sh
+# Generate distro OS Release
+ARG BUILD_DATE=unknown
+ARG IMAGE_VERSION
+ARG FEDORA_VERSION
+RUN set -eu; \
+    file=/usr/lib/os-release; \
+    full="${FEDORA_VERSION}.${IMAGE_VERSION}"; \
+    sed -i '/^OSTREE_VERSION=/d;/^BUILD_ID=/d;/^IMAGE_VERSION=/d' $file; \
+    sed -i "s|^VERSION=.*|VERSION=\"${full} (GNOME - Ramon)\"|" $file; \
+    sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"Fedora Linux ${FEDORA_VERSION} (GNOME - Ramon)\"|" $file; \
+    printf "OSTREE_VERSION='%s'\nBUILD_ID=\"%s\"\nIMAGE_VERSION=\"%s\"\n" "$full" "$full" "$full" >> $file
+LABEL org.opencontainers.image.version="${IMAGE_VERSION}"
 # Cleanup time
 RUN systemctl mask systemd-remount-fs.service && \
     rm -rvf /tmp/workdir && \
