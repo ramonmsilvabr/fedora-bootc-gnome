@@ -38,7 +38,7 @@ RUN set -eu; \
     full="${FEDORA_VERSION}.${IMAGE_VERSION}"; \
     sed -i '/^OSTREE_VERSION=/d;/^BUILD_ID=/d;/^IMAGE_VERSION=/d' $file; \
     sed -i "s|^VERSION=.*|VERSION=\"${full} (GNOME - Ramon)\"|" $file; \
-    sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"Fedora Linux ${FEDORA_VERSION}.${IMAGE_VERSION}} (GNOME) - Customized by @ramonmsilvabr \"|" $file; \
+    sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"Fedora Linux ${FEDORA_VERSION}.${IMAGE_VERSION} (GNOME) - Customized by @ramonmsilvabr\"|" $file; \
     printf "OSTREE_VERSION='%s'\nBUILD_ID=\"%s\"\nIMAGE_VERSION=\"%s\"\n" "$full" "$full" "$full" >> $file
 LABEL org.opencontainers.image.version="${FEDORA_VERSION}.${IMAGE_VERSION}"
 # Cleanup time
