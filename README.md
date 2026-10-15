@@ -26,7 +26,7 @@ Puxe a imagem e compile pelo podman, após terminar faça o switch via bootc.
 
 ```
 sudo podman pull quay.io/fedora/fedora-bootc:44
-sudo podman build --build-arg FEDORA_VERSION=44 -t fedora-bootc-gnome . -f builds/default/Containerfile
+sudo podman build --build-arg FEDORA_VERSION=44 --build-arg IMAGE_VERSION=$(date +%Y%m%d).0 -t fedora-bootc-gnome . -f builds/default/Containerfile
 sudo bootc switch --transport containers-storage localhost/fedora-bootc-gnome:latest
 ```
 ## ISOs
