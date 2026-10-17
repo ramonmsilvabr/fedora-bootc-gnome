@@ -66,7 +66,7 @@ jobs:
             -f ./builds/default/Containerfile \
             -v "$(pwd):/run/src" \
             --build-arg FEDORA_VERSION=${{ env.SELECTED_VERSION }} \
-            --build-arg IMAGE_VERSION=$(date +%Y%m%d).0 \
+            --build-arg IMAGE_VERSION=${{ steps.meta.outputs.date }} \
             .
 
       - name: Rechunk via bootc-base-imagectl
