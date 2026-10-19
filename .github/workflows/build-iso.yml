@@ -46,6 +46,10 @@ jobs:
  
       - name: Baixar a imagem
         run: sudo podman pull "${IMAGE_REF}"
+
+      - name: Relaxar restrições do AppArmor
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
  
       - name: Gerar ISO com bootc-image-builder
         run: |
@@ -57,6 +61,7 @@ jobs:
           sudo podman run --rm --privileged \
             --pull=newer \
             --security-opt label=type:unconfined_t \
+            --security-opt apparmor=unconfined \
             -v "$PWD/output:/output" \
             "${CONFIG_ARGS[@]}" \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
