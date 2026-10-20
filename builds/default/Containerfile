@@ -24,20 +24,16 @@ RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --seto
 RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /etc/plymouth && \
     mv -v ./plymouthd.conf /etc/plymouth/plymouthd.conf
-# Return to root
-WORKDIR /
 # Generate distro OS Release
 ARG BUILD_DATE=unknown
 ARG IMAGE_VERSION
 ARG FEDORA_VERSION
-RUN set -eu; \
-    file=/usr/lib/os-release; \
-    full="${FEDORA_VERSION}.${IMAGE_VERSION}"; \
-    sed -i '/^OSTREE_VERSION=/d;/^BUILD_ID=/d;/^IMAGE_VERSION=/d' $file; \
-    sed -i "s|^VERSION=.*|VERSION=\"${full} (GNOME) - por @ramonmsilvabr\"|" $file; \
-    sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"Fedora Linux ${FEDORA_VERSION}.${IMAGE_VERSION} (GNOME) - por @ramonmsilvabr\"|" $file; \
-    printf "OSTREE_VERSION='%s'\nBUILD_ID=\"%s\"\nIMAGE_VERSION=\"%s\"\n" "$full" "$full" "$full" >> $file
 LABEL org.opencontainers.image.version="${FEDORA_VERSION}.${IMAGE_VERSION}"
+RUN chmod +x ./generate-os-release.sh && \
+    bash -c ./generate-os-release.sh && \
+    cat /etc/os-release
+# Return to root
+WORKDIR /
 # This regenerates initramfs for the container
 RUN chmod +x /tmp/workdir/initramfs-regen.sh && \
     bash -c /tmp/workdir/initramfs-regen.sh
