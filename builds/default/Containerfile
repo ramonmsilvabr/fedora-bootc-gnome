@@ -30,8 +30,7 @@ ARG IMAGE_VERSION
 ARG FEDORA_VERSION
 LABEL org.opencontainers.image.version="${FEDORA_VERSION}.${IMAGE_VERSION}"
 RUN chmod +x ./generate-os-release.sh && \
-    bash -c ./generate-os-release.sh && \
-    cat /etc/os-release
+    bash -c ./generate-os-release.sh
 # Return to root
 WORKDIR /
 # This regenerates initramfs for the container
