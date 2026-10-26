@@ -20,7 +20,7 @@ jobs:
   build-iso:
     runs-on: ubuntu-24.04
     permissions:
-      contents: read
+      contents: write
       packages: read
  
     steps:
@@ -76,11 +76,13 @@ jobs:
           sha256sum output/bootiso/*.iso > output/bootiso/SHA256SUMS
           ls -lh output/bootiso
  
-      - name: Publicar ISO como artefato
-        uses: actions/upload-artifact@v4
+      - name: Criar Release e enviar ISO
+        uses: softprops/action-gh-release@v2
         with:
-          name: fedora-bootc-gnome-iso-${{ inputs.tag }}
-          path: output/bootiso/*
-          compression-level: 0
-          retention-days: 7
-          if-no-files-found: error
+          tag_name: ${{ inputs.tag }}
+          name: Release ${{ inputs.tag }}
+          files: output/bootiso/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
