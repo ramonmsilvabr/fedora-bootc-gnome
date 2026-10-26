@@ -3,4 +3,13 @@ contents = """
 lang pt_BR.UTF-8
 keyboard br-abnt2
 timezone America/Sao_Paulo
-"""
+
+zerombr
+clearpart --all --initlabel
+part /boot/efi --fstype=efi   --size=600
+part /boot     --fstype=ext4  --size=2048
+part btrfs.01  --fstype=btrfs --grow --encrypted --luks-version=luks2
+btrfs none --label=fedora btrfs.01
+btrfs /          --subvol --name=root btrfs.01 --label=fedora
+btrfs /var/home  --subvol --name=home btrfs.01 --label=fedora
+""" 
