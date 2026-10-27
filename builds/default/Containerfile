@@ -24,6 +24,10 @@ RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --seto
 RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /etc/plymouth && \
     mv -v ./plymouthd.conf /etc/plymouth/plymouthd.conf
+# Essential Flatpaks
+RUN flatpak remote-delete fedora && \
+    flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo && \
+    grep -v '^#' ./flatpaks.list | tr '\n' ' ' | xargs flatpak install -y flathub
 # Generate distro OS Release
 ARG BUILD_DATE=unknown
 ARG IMAGE_VERSION
