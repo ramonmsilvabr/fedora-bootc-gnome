@@ -6,7 +6,7 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/flatpak-repo-config.sh
+ExecStart=/usr/libexec/flatpak-repo-config.sh
 
 [Install]
 WantedBy=multi-user.target
