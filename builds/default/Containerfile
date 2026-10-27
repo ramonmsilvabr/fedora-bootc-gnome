@@ -25,8 +25,8 @@ RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --s
     mkdir -p /etc/plymouth && \
     mv -v ./plymouthd.conf /etc/plymouth/plymouthd.conf
 # Essential Flatpaks
-RUN mv -v ./flatpak-repo-config.sh /usr/local/bin && \
-    chmod +x /usr/local/bin/flatpak-repo-config.sh && \
+RUN mv -v ./flatpak-repo-config.sh /usr/libexec/ && \
+    chmod +x /usr/libexec/flatpak-repo-config.sh && \
     mv -v ./default.preinstall /usr/share/flatpak/preinstall.d/ && \
     mv -v ./flatpak-repo-config.service /usr/lib/systemd/system/ && \
     mv -v ./flatpak-preinstall.service /usr/lib/systemd/system/ && \
