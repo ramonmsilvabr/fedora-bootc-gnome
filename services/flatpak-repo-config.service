@@ -1,0 +1,12 @@
+[Unit]
+Description=Initial Flatpak Bootstraps
+ConditionPathExists=!/var/lib/flatpak/app
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/flatpak-repo-config.sh
+
+[Install]
+WantedBy=multi-user.target

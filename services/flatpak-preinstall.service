@@ -1,0 +1,13 @@
+[Unit]
+Description=Install flatpaks in image
+After=network-online.target flathub-repo-config.service
+Wants=network-online.target
+Requires=flathub-remote.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/flatpak preinstall -y
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
