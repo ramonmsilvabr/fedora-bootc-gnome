@@ -18,7 +18,11 @@ Possibilitar o uso do Fedora Linux sem se basear na distribuição oficial, com 
 
 ## Flatpaks
 
-(em construção)
+- Remove o remoto Fedora uma vez após a instalação
+- Instala o repositório do [Flathub](https://flathub.org/).
+- Apenas dois flatpaks são inclusos:
+    - **Mozilla Firefox**: Permite navegar na Web para fazer as instalações
+    - **Save Desktop**: Restaura todos os outros apps.
 
 # Instalação
 
@@ -31,5 +35,4 @@ sudo bootc switch --transport containers-storage localhost/fedora-bootc-gnome:la
 ```
 ## ISOs
 
-(em construção)
-
+Disponíveis uma vez por lançamento na aba Releases
