@@ -6,7 +6,7 @@ FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} as final
 RUN mkdir /tmp/workdir
 WORKDIR /tmp/workdir
 # Copy all the scripts, configs and package lists
-COPY /packages/* /configs/* /scripts/* ./
+COPY /packages/* /configs/* /scripts/* /services/* ./
 # Drivers, firmware, hardware support and fine-tuned performance customs
 RUN dnf install -y 'dnf5-command(config-manager)' && \
     dnf upgrade -y --refresh && \
@@ -25,9 +25,11 @@ RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --s
     mkdir -p /etc/plymouth && \
     mv -v ./plymouthd.conf /etc/plymouth/plymouthd.conf
 # Essential Flatpaks
-RUN flatpak remote-delete fedora && \
-    flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo && \
-    grep -v '^#' ./flatpaks.list | tr '\n' ' ' | xargs flatpak preinstall -y flathub
+RUN mv -v ./default.preinstall /usr/share/flatpak/preinstall.d/ && \
+    mv -v ./flatpak-repo-config.service /usr/lib/systemd/system/ && \
+    mv -v ./flatpak-preinstall.service /usr/lib/systemd/system/ && \
+    systemctl enable flatpak-repo-config.service && \
+    systemctl enable flatpak-preinstall.service
 # Generate distro OS Release
 ARG BUILD_DATE=unknown
 ARG IMAGE_VERSION
