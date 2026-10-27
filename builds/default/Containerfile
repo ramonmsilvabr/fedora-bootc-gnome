@@ -27,7 +27,7 @@ RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --s
 # Essential Flatpaks
 RUN flatpak remote-delete fedora && \
     flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo && \
-    grep -v '^#' ./flatpaks.list | tr '\n' ' ' | xargs flatpak install -y flathub
+    grep -v '^#' ./flatpaks.list | tr '\n' ' ' | xargs flatpak preinstall -y flathub
 # Generate distro OS Release
 ARG BUILD_DATE=unknown
 ARG IMAGE_VERSION
