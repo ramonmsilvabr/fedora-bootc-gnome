@@ -2,7 +2,7 @@
 Description=Install flatpaks in image
 After=network-online.target flathub-repo-config.service
 Wants=network-online.target
-Requires=flathub-remote.service
+Requires=flathub-repo-config.service
 
 [Service]
 Type=oneshot
