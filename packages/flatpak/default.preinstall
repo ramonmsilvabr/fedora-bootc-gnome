@@ -1,0 +1,7 @@
+[Flatpak Preinstall org.mozilla.firefox]
+Branch=stable
+Remote=flathub
+
+[Flatpak Preinstall io.github.vikdevelop.SaveDesktop]
+Branch=stable
+Remote=flathub
