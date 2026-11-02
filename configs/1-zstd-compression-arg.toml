@@ -1,3 +1,0 @@
-kargs = [
-    "rootflags=compress=zstd:1"
-]
