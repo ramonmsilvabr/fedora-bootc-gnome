@@ -8,9 +8,15 @@ langpacks-pt_BR
 hunspell-pt-BR
 hyphen-pt-BR
 glibc-langpack-pt
+langpacks-en
+langpacks-core-en
+langpacks-fonts-en
+hunspell-en
 open-sans-fonts
 auditctl
 liberation-mono-fonts
+liberation-sans-fonts
+liberation-serif-fonts
 google-noto-color-emoji-fonts
 google-noto-emoji-fonts
 # Shares
@@ -34,3 +40,8 @@ fpaste
 avahi-tools
 bash-color-prompt
 zip
+whois
+mtr
+wireguard-tools
+ImageMagick
+wget2
