@@ -10,6 +10,7 @@ COPY /packages/* /configs/* /scripts/* /services/* ./
 # Drivers, firmware, hardware support and fine-tuned performance customs
 RUN dnf install -y 'dnf5-command(config-manager)' && \
     dnf upgrade -y --refresh && \
+    dnf upgrade --enablerepo=updates-testing --refresh --advisory=FEDORA-2026-ddb0105487 && \
     mv -v ./0-custom-kargs.toml /usr/lib/bootc/kargs.d/ && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /usr/lib/systemd/zram-generator.conf.d /usr/lib/systemd/oomd.conf.d && \
