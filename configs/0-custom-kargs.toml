@@ -1,6 +1,5 @@
 kargs = [
     "nouveau.atomic=1",
-    "nouveau.runpm=0",
     "rootflags=compress=zstd:1",
     "vconsole.keymap=br"
 ]
