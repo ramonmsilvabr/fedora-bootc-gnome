@@ -12,7 +12,6 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
     dnf upgrade -y --refresh && \
     mv -v ./0-custom-kargs.toml /usr/lib/bootc/kargs.d/ && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
-    dnf upgrade -y --enablerepo=updates-testing --refresh --advisory=FEDORA-2026-655049a906 && \
     mkdir -p /usr/lib/systemd/zram-generator.conf.d /usr/lib/systemd/oomd.conf.d && \
     mv -v ./zram-generator.conf /usr/lib/systemd/zram-generator.conf.d/1-zram-custom.conf && \
     mv -v ./oomd.conf /usr/lib/systemd/oomd.conf.d/1-oomd-custom.conf
