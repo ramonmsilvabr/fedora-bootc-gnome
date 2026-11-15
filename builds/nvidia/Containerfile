@@ -27,20 +27,24 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
     mv -v ./oomd.conf /usr/lib/systemd/oomd.conf.d/1-oomd-custom.conf
 # NVIDIA Support 
 COPY --from=builder /var/cache/akmods/nvidia/kmod-nvidia*.rpm ./
+COPY /pki/RPM-GPG-KEY-slaanesh /tmp
 RUN dnf config-manager addrepo -y --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo && \
     dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
+    echo "cd037a2d00bd3126e808d53921e28ca7bafabc1834abd675d4ad4b5b4d850f49  /tmp/RPM-GPG-KEY-slaanesh" | sha256sum -c - && \
+    rpm --import /tmp/RPM-GPG-KEY-slaanesh && \
     mv -v ./1-nvidia-kargs.toml /usr/lib/bootc/kargs.d/ && \
     dnf download -y --destdir=./ nvidia-kmod-common && \
-    rpm -vi --nodeps ./nvidia-kmod-common.rpm && \
+    ls ./ && \
+    rpm -vi --nodeps ./nvidia-kmod-common*.rpm && \
     dnf install -y ./kmod-nvidia*.rpm && \
     grep -v '^#' ./rpms-nvidia-support.list | tr '\n' ' ' | xargs dnf install -y && \
-    grep -v '^#' ./rpms-nvidia-container.list | tr '\n' ' ' | xargs dnf install -y --nogpgcheck && \
+    grep -v '^#' ./rpms-nvidia-container.list | tr '\n' ' ' | xargs dnf install -y --nogpgcheck
 # Desktop environment and related tools
 RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \
     dnf install -y --nogpgcheck gnome-software-bootc
 # Essential Packages
-RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+RUN grep -v '^#' ./rpms-essentials.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /etc/plymouth && \
     mv -v ./plymouthd.conf /etc/plymouth/plymouthd.conf
 # Essential Flatpaks

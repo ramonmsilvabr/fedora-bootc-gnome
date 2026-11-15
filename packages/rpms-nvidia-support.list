@@ -3,4 +3,4 @@ nvidia-driver
 nvidia-settings
 nvidia-driver-cuda
 # Suporte a Video Decode e Encode
-libva-nvidia-drivers
+libva-nvidia-driver
