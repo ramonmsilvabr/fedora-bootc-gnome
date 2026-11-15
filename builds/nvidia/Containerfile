@@ -5,7 +5,7 @@ FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} AS builder
 RUN dnf upgrade -y 'kernel*' --refresh && \
     KERNEL_VERSION="$(rpm -q kernel-core --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')" && \
     dnf install -y 'dnf5-command(config-manager)' && \
-    dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo && \
+    dnf config-manager addrepo -y --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo && \
     dnf install -y akmod-nvidia && \
     akmods --kernels "$KERNEL_VERSION" --force
 # Fedora version selection
@@ -17,19 +17,24 @@ RUN mkdir /tmp/workdir
 WORKDIR /tmp/workdir
 # Copy all the scripts, configs and package lists
 COPY /packages/* /configs/* /scripts/* /services/* ./
-COPY --from=builder /var/cache/akmods/nvidia/kmod-nvidia*.rpm ./
 # Drivers, firmware, hardware support and fine-tuned performance customs
-RUN dnf install -y 'dnf5-command(config-manager)' && \
-    dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo && \
-    dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
+RUN dnf install -y 'dnf5-command(config-manager)' && \  
     dnf upgrade -y --refresh && \
     mv -v ./0-custom-kargs.toml /usr/lib/bootc/kargs.d/ && \
     mv -v ./1-nvidia-kargs.toml /usr/lib/bootc/kargs.d/ && \
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
-    grep -v '^#' ./rpms-nvidia-support.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /usr/lib/systemd/zram-generator.conf.d /usr/lib/systemd/oomd.conf.d && \
     mv -v ./zram-generator.conf /usr/lib/systemd/zram-generator.conf.d/1-zram-custom.conf && \
     mv -v ./oomd.conf /usr/lib/systemd/oomd.conf.d/1-oomd-custom.conf
+# NVIDIA Support 
+COPY --from=builder /var/cache/akmods/nvidia/kmod-nvidia*.rpm ./
+RUN dnf config-manager addrepo -y --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo && \
+    dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
+    dnf download -y nvidia-kmod-common && \
+    rpm -vi --no-deps ./nvidia-kmod-common && \
+    dnf install -y ./kmod-nvidia*.rpm && \
+    grep -v '^#' ./rpms-nvidia-support.list | tr '\n' ' ' | xargs dnf install -y && \
+    grep -v '^#' ./rpms-nvidia-container.list | tr '\n' ' ' | xargs dnf install -y --nogpgcheck && \
 # Desktop environment and related tools
 RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \
