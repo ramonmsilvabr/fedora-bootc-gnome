@@ -44,7 +44,7 @@ RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --seto
     dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \
     dnf install -y --nogpgcheck gnome-software-bootc
 # Essential Packages
-RUN grep -v '^#' ./rpms-essentials.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /etc/plymouth && \
     mv -v ./plymouthd.conf /etc/plymouth/plymouthd.conf
 # Essential Flatpaks
@@ -58,8 +58,8 @@ RUN mv -v ./flatpak-repo-config.sh /usr/libexec/ && \
 # This signs the kernel modules installed as kmods
 ARG SECUREBOOT=true
 COPY /pki/MOK.der ./pki/ 
-RUN mv -v ./sign-kmods.sh ./pki/ && \
-    --mount=type=bind,source=.,target=/context \
+RUN mv -v ./sign-kmods.sh ./pki/
+RUN --mount=type=bind,source=.,target=/context \
     /bin/bash -c 'if [ "$SECUREBOOT" = true ]; then \
         mkdir -p ./.actions; \
         cp -r /context/.actions/* ./pki/; \
