@@ -1,0 +1,81 @@
+# Fedora version selection
+ARG FEDORA_VERSION=45
+FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} AS builder
+# Build kmod-nvidia
+RUN dnf upgrade -y 'kernel*' --refresh && \
+    KERNEL_VERSION="$(rpm -q kernel-core --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')" && \
+    dnf install -y 'dnf5-command(config-manager)' && \
+    dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo && \
+    dnf install -y akmod-nvidia && \
+    akmods --kernels "$KERNEL_VERSION" --force
+# Fedora version selection
+ARG FEDORA_VERSION=45
+# Pull fedora-bootc from official quay.io repo as final image
+FROM quay.io/fedora/fedora-bootc:${FEDORA_VERSION} as final
+# Change working directory
+RUN mkdir /tmp/workdir
+WORKDIR /tmp/workdir
+# Copy all the scripts, configs and package lists
+COPY /packages/* /configs/* /scripts/* /services/* ./
+COPY --from=builder /var/cache/akmods/nvidia/kmod-nvidia*.rpm ./
+# Drivers, firmware, hardware support and fine-tuned performance customs
+RUN dnf install -y 'dnf5-command(config-manager)' && \
+    dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo && \
+    dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
+    dnf upgrade -y --refresh && \
+    mv -v ./0-custom-kargs.toml /usr/lib/bootc/kargs.d/ && \
+    mv -v ./1-nvidia-kargs.toml /usr/lib/bootc/kargs.d/ && \
+    grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    grep -v '^#' ./rpms-nvidia-support.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    mkdir -p /usr/lib/systemd/zram-generator.conf.d /usr/lib/systemd/oomd.conf.d && \
+    mv -v ./zram-generator.conf /usr/lib/systemd/zram-generator.conf.d/1-zram-custom.conf && \
+    mv -v ./oomd.conf /usr/lib/systemd/oomd.conf.d/1-oomd-custom.conf
+# Desktop environment and related tools
+RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \
+    dnf install -y --nogpgcheck gnome-software-bootc
+# Essential Packages
+RUN grep -v '^#' ./rpms-essenciais.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
+    mkdir -p /etc/plymouth && \
+    mv -v ./plymouthd.conf /etc/plymouth/plymouthd.conf
+# Essential Flatpaks
+RUN mv -v ./flatpak-repo-config.sh /usr/libexec/ && \
+    chmod +x /usr/libexec/flatpak-repo-config.sh && \
+    mv -v ./default.preinstall /usr/share/flatpak/preinstall.d/ && \
+    mv -v ./flatpak-repo-config.service /usr/lib/systemd/system/ && \
+    mv -v ./flatpak-preinstall.service /usr/lib/systemd/system/ && \
+    systemctl enable flatpak-repo-config.service && \
+    systemctl enable flatpak-preinstall.service
+# This signs the kernel modules installed as kmods
+ARG SECUREBOOT=true
+COPY /pki/MOK.der ./pki/ 
+RUN mv -v ./sign-kmods.sh ./pki/ && \
+    --mount=type=bind,source=.,target=/context \
+    /bin/bash -c 'if [ "$SECUREBOOT" = true ]; then \
+        mkdir -p ./.actions; \
+        cp -r /context/.actions/* ./pki/; \
+        bash ./pki/sign-kmods.sh; \
+    fi'
+# Generate distro OS Release
+ARG BUILD_DATE=unknown
+ARG IMAGE_VERSION
+ARG FEDORA_VERSION
+LABEL org.opencontainers.image.version="${FEDORA_VERSION}.${IMAGE_VERSION}"
+RUN chmod +x ./generate-os-release.sh && \
+    bash -c ./generate-os-release.sh
+# Return to root
+WORKDIR /
+# This regenerates initramfs for the container
+RUN chmod +x /tmp/workdir/initramfs-regen.sh && \
+    bash -c /tmp/workdir/initramfs-regen.sh
+# Cleanup time
+RUN systemctl mask systemd-remount-fs.service && \
+    systemctl mask rpm-ostree-countme.timer && \
+    rm -rvf /tmp/workdir && \
+    dnf clean all && \
+    rm -rfv /var/cache/* \
+        /var/log/* \
+        /var/tmp/* \
+        /var/lib/dnf/*
+# Bootc Lint Part 
+RUN bootc container lint

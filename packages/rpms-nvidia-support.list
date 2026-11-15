@@ -1,0 +1,12 @@
+# Pacotes principais
+./kmod-nvidia*.rpm
+nvidia-driver
+nvidia-settings
+nvidia-driver-cuda
+# Suporte a CUDA nos containers
+nvidia-container-toolkit
+nvidia-container-toolkit-base
+libnvidia-container-tools
+libnvidia-container1
+# Suporte a Video Decode e Encode
+libva-nvidia-driver
