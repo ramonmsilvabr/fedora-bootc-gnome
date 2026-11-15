@@ -31,7 +31,7 @@ COPY --from=builder /var/cache/akmods/nvidia/kmod-nvidia*.rpm ./
 RUN dnf config-manager addrepo -y --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo && \
     dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
     dnf download -y nvidia-kmod-common && \
-    rpm -vi --no-deps ./nvidia-kmod-common && \
+    rpm -vi --nodeps ./nvidia-kmod-common.rpm && \
     dnf install -y ./kmod-nvidia*.rpm && \
     grep -v '^#' ./rpms-nvidia-support.list | tr '\n' ' ' | xargs dnf install -y && \
     grep -v '^#' ./rpms-nvidia-container.list | tr '\n' ' ' | xargs dnf install -y --nogpgcheck && \
