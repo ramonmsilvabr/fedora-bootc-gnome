@@ -20,8 +20,7 @@ COPY /packages/* /configs/* /scripts/* /services/* ./
 # Drivers, firmware, hardware support and fine-tuned performance customs
 RUN dnf install -y 'dnf5-command(config-manager)' && \  
     dnf upgrade -y --refresh && \
-    mv -v ./0-custom-kargs.toml /usr/lib/bootc/kargs.d/ && \
-    mv -v ./1-nvidia-kargs.toml /usr/lib/bootc/kargs.d/ && \
+    mv -v ./0-custom-kargs.toml /usr/lib/bootc/kargs.d/ && \\
     grep -v '^#' ./rpms-drivers.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /usr/lib/systemd/zram-generator.conf.d /usr/lib/systemd/oomd.conf.d && \
     mv -v ./zram-generator.conf /usr/lib/systemd/zram-generator.conf.d/1-zram-custom.conf && \
@@ -30,7 +29,8 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
 COPY --from=builder /var/cache/akmods/nvidia/kmod-nvidia*.rpm ./
 RUN dnf config-manager addrepo -y --from-repofile=https://negativo17.org/repos/fedora-nvidia.repo && \
     dnf config-manager addrepo -y --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo && \
-    dnf download -y nvidia-kmod-common && \
+    mv -v ./1-nvidia-kargs.toml /usr/lib/bootc/kargs.d/ && \
+    dnf download -y --destdir=./ nvidia-kmod-common && \
     rpm -vi --nodeps ./nvidia-kmod-common.rpm && \
     dnf install -y ./kmod-nvidia*.rpm && \
     grep -v '^#' ./rpms-nvidia-support.list | tr '\n' ' ' | xargs dnf install -y && \
