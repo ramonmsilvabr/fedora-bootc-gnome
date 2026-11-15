@@ -12,7 +12,7 @@ on:
         required: false
 
 env:
-  IMAGE_NAME: fedora-bootc-gnome
+  IMAGE_NAME: fedora-bootc-gnome-nvidia
   REGISTRY: ghcr.io/${{ github.repository_owner }}
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
