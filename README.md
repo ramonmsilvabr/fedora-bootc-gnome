@@ -30,7 +30,7 @@ Puxe a imagem e compile pelo podman, após terminar faça o switch via bootc.
 
 ```
 sudo podman pull quay.io/fedora/fedora-bootc:45
-sudo podman build --build-arg FEDORA_VERSION=45 --build-arg IMAGE_VERSION=$(date +%Y%m%d).0 -t fedora-bootc-gnome . -f builds/nvidia/Containerfile
+sudo podman build --build-arg FEDORA_VERSION=45 --build-arg IMAGE_VERSION=$(date +%Y%m%d).0 -t fedora-bootc-gnome-nvidia . -f builds/nvidia/Containerfile
 sudo bootc switch --transport containers-storage localhost/fedora-bootc-gnome-nvidia:latest
 ```
 ## ISOs
