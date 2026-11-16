@@ -34,11 +34,11 @@ RUN dnf config-manager addrepo -y --from-repofile=https://negativo17.org/repos/f
     rpm --import /tmp/RPM-GPG-KEY-slaanesh && \
     mv -v ./1-nvidia-kargs.toml /usr/lib/bootc/kargs.d/ && \
     dnf download -y --destdir=./ nvidia-kmod-common && \
-    ls ./ && \
     rpm -vi --nodeps ./nvidia-kmod-common*.rpm && \
     dnf install -y ./kmod-nvidia*.rpm && \
     grep -v '^#' ./rpms-nvidia-support.list | tr '\n' ' ' | xargs dnf install -y && \
-    grep -v '^#' ./rpms-nvidia-container.list | tr '\n' ' ' | xargs dnf install -y --nogpgcheck
+    grep -v '^#' ./rpms-nvidia-container.list | tr '\n' ' ' | xargs dnf install -y --nogpgcheck && \
+    mv -v ./nvidia.conf /usr/lib/modprobe.d/
 # Desktop environment and related tools
 RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \
