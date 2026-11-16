@@ -13,8 +13,8 @@ Possibilitar o uso do Fedora Linux sem se basear na distribuição oficial, com 
 - Compositor: Mutter 51.x
 - Ambiente Desktop: GNOME Shell 51.x
 - Firmware: Fechados/distribuídos pelo linux-firmware
-- Drivers: Open Source pelo Mesa3D
-- Módulos carregados: **ntsync**
+- Drivers: Open Source pelo Mesa3D e NVIDIA
+- Módulos carregados: **ntsync**,**nvidia\***s
 
 ## Flatpaks
 
@@ -30,9 +30,14 @@ Puxe a imagem e compile pelo podman, após terminar faça o switch via bootc.
 
 ```
 sudo podman pull quay.io/fedora/fedora-bootc:45
-sudo podman build --build-arg FEDORA_VERSION=45 --build-arg IMAGE_VERSION=$(date +%Y%m%d).0 -t fedora-bootc-gnome . -f builds/default/Containerfile
-sudo bootc switch --transport containers-storage localhost/fedora-bootc-gnome:latest
+sudo podman build --build-arg FEDORA_VERSION=45 --build-arg IMAGE_VERSION=$(date +%Y%m%d).0 -t fedora-bootc-gnome . -f builds/nvidia/Containerfile
+sudo bootc switch --transport containers-storage localhost/fedora-bootc-gnome-nvidia:latest
 ```
 ## ISOs
 
-Disponíveis uma vez por lançamento na aba Releases
+Construídas localmente com o podman e o Image Builder.
+```
+cd fedora-bootc-gnome
+mkdir output
+sudo podman build   -t localhost/bootc-installer:latest -f ./builds/image-builder/Containerfile .
+sudo podman run --rm --privileged  --build-arg IMAGE_REGISTRY=registry:ghcr.io/ramonmsilvabr/fedora-bootc-gnome-nvidia:latest -v ./output:/output   -v ./iso/config.toml:/config.toml:ro   -v /var/lib/containers/storage:/var/lib/containers/storage   ghcr.io/osbuild/image-builder-cli:latest   build --bootc-ref localhost/bootc-installer:latest         --bootc-default-fs ext4 --blueprint /config.toml bootc-generic-iso

@@ -31,9 +31,10 @@ grub2:
       initrd: "/images/pxeboot/initrd.img"
 EOT
 
+ARG IMAGE_REGISTRY
 # Enables bootc installation mode in ISO's Anaconda (this is where kickstart gets fetched)
 COPY <<EOT /usr/share/anaconda/interactive-defaults.ks
-bootc --source-imgref registry:ghcr.io/ramonmsilvabr/fedora-bootc-gnome:latest --target-imgref ghcr.io/ramonmsilvabr/fedora-bootc-gnome:latest
+bootc --source-imgref ${IMAGE_REGISTRY} --target-imgref ghcr.io/ramonmsilvabr/fedora-bootc-gnome:latest
 EOT
 
 # Anaconda environment adjustments (with DNF5 path)
