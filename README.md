@@ -35,9 +35,11 @@ sudo bootc switch --transport containers-storage localhost/fedora-bootc-gnome-nv
 ```
 ## ISOs
 
-Construídas localmente com o podman e o Image Builder.
+Construídas localmente com o podman e o Image Builder. Faça o processo de criação da ISO na raiz do projeto depois de cloná-lo
 ```
-cd fedora-bootc-gnome
+git clone https://github.com/ramonmsilvabr/fedora-bootc-gnome.git
+cd fedora-bootc-gnomes
 mkdir output
-sudo podman build   -t localhost/bootc-installer:latest -f ./builds/image-builder/Containerfile .
-sudo podman run --rm --privileged  --build-arg IMAGE_REGISTRY=registry:ghcr.io/ramonmsilvabr/fedora-bootc-gnome-nvidia:latest -v ./output:/output   -v ./iso/config.toml:/config.toml:ro   -v /var/lib/containers/storage:/var/lib/containers/storage   ghcr.io/osbuild/image-builder-cli:latest   build --bootc-ref localhost/bootc-installer:latest         --bootc-default-fs ext4 --blueprint /config.toml bootc-generic-iso
+sudo podman build  --build-arg IMAGE_REGISTRY=registry:ghcr.io/ramonmsilvabr/fedora-bootc-gnome-nvidia:latest -t localhost/bootc-installer:latest -f ./builds/image-builder/Containerfile .
+sudo podman run --rm --privileged   -v ./output:/output   -v ./iso/config.toml:/config.toml:ro   -v /var/lib/containers/storage:/var/lib/containers/storage   ghcr.io/osbuild/image-builder-cli:latest   build --bootc-ref localhost/bootc-installer:latest         --bootc-default-fs ext4 --blueprint /config.toml bootc-generic-isoss
+```
