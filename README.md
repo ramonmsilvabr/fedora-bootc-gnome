@@ -14,7 +14,7 @@ Possibilitar o uso do Fedora Linux sem se basear na distribuição oficial, com 
 - Ambiente Desktop: GNOME Shell 51.x
 - Firmware: Fechados/distribuídos pelo linux-firmware
 - Drivers: Open Source pelo Mesa3D e NVIDIA
-- Módulos carregados: **ntsync**,**nvidia\***s
+- Módulos carregados: **ntsync**,**nvidia**
 
 ## Flatpaks
 
