@@ -2,7 +2,7 @@ name: nvidia build
 
 on:
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: '0 0 * * *'
       timezone: 'America/Sao_Paulo'
   workflow_dispatch:
     inputs:
