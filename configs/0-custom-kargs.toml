@@ -1,4 +1,6 @@
 kargs = [
+    "rhgb",
+    "quiet",
     "rootflags=compress=zstd:1",
     "vconsole.keymap=br"
 ]
