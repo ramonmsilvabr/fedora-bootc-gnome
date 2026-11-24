@@ -42,7 +42,9 @@ RUN dnf config-manager addrepo -y --from-repofile=https://negativo17.org/repos/f
 # Desktop environment and related tools
 RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \
-    dnf install -y --nogpgcheck gnome-software-bootc
+    dnf install -y --nogpgcheck gnome-software-bootc && \
+    mkdir -p /usr/local/share/glib-2.0/schemas && \
+    glib-compile-schemas /usr/local/share/glib-2.0/schemas
 # Essential Packages
 RUN grep -v '^#' ./rpms-essentials.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     mkdir -p /etc/plymouth && \
