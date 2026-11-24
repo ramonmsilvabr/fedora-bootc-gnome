@@ -21,7 +21,7 @@ RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --seto
     dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \
     dnf install -y --nogpgcheck gnome-software-bootc && \
 RUN mkdir -p /usr/local/share/glib-2.0/schemas
-COPY schemas/org.gnome.Shell.Extensions.GSConnect.gschema.xml /usr/local/share/glib-2.0/schemas/
+COPY /schemas/org.gnome.Shell.Extensions.GSConnect.gschema.xml /usr/local/share/glib-2.0/schemas/
 RUN glib-compile-schemas /usr/local/share/glib-2.0/schemas
 # Essential Packages
 RUN grep -v '^#' ./rpms-essentials.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
