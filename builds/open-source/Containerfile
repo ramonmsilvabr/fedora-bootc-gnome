@@ -15,7 +15,8 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
     mkdir -p /usr/lib/systemd/zram-generator.conf.d /usr/lib/systemd/oomd.conf.d && \
     mv -v ./zram-generator.conf /usr/lib/systemd/zram-generator.conf.d/1-zram-custom.conf && \
     mv -v ./oomd.conf /usr/lib/systemd/oomd.conf.d/1-oomd-custom.conf && \
-    mv -v ./nouveau.conf /usr/lib/modprobe.d/
+    mv -v ./nouveau.conf /usr/lib/modprobe.d/ && \
+    mv -v ./bootc-fetch-apply.updates.service /usr/lib/systemd/system/bootc-fetch-apply-updates.service
 # Desktop environment and related tools
 RUN grep -v '^#' ./rpms-desktop.list | tr '\n' ' ' | xargs dnf install -y --setopt=install_weak_deps=False && \
     dnf config-manager addrepo -y --from-repofile=https://ramonmsilvabr.github.io/gnome-software-plugin-bootc/gnome-software-bootc.repo && \
