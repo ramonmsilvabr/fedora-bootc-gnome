@@ -25,7 +25,7 @@ RUN dnf install -y 'dnf5-command(config-manager)' && \
     mkdir -p /usr/lib/systemd/zram-generator.conf.d /usr/lib/systemd/oomd.conf.d && \
     mv -v ./zram-generator.conf /usr/lib/systemd/zram-generator.conf.d/1-zram-custom.conf && \
     mv -v ./oomd.conf /usr/lib/systemd/oomd.conf.d/1-oomd-custom.conf && \
-    mv -v ./bootc-fetch-apply.updates.service /usr/lib/systemd/system/bootc-fetch-apply-updates.service
+    mv -v ./bootc-fetch-apply-updates.service /usr/lib/systemd/system/bootc-fetch-apply-updates.service
 # NVIDIA Support 
 COPY --from=builder /var/cache/akmods/nvidia/kmod-nvidia*.rpm ./
 COPY /pki/RPM-GPG-KEY-slaanesh /tmp
